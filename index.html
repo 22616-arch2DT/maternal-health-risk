@@ -656,6 +656,24 @@ function predictManual() {
     return;
   }
 
+  const ranges = {
+    'Âge': [age, 10, 70],
+    'Tension systolique': [sys, 70, 200],
+    'Tension diastolique': [dia, 40, 140],
+    'Glycémie': [bs, 1, 30],
+    'Température corporelle': [temp, 95, 105],
+    'Fréquence cardiaque': [hr, 40, 180]
+  };
+
+  const errors = Object.entries(ranges)
+    .filter(([_, [v, min, max]]) => v < min || v > max)
+    .map(([name, [v, min, max]]) => `• ${name} : ${v} (doit être entre ${min} et ${max})`);
+
+  if (errors.length) {
+    alert('Valeurs hors plage :\n' + errors.join('\n'));
+    return;
+  }
+
   const { pred, proba } = predictRaw(age, sys, dia, bs, temp, hr);
 
   const labels = ['low','mid','high'];
